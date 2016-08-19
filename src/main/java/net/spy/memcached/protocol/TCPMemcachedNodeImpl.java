@@ -199,6 +199,9 @@ public abstract class TCPMemcachedNodeImpl extends SpyObject implements
 
       while(o != null && toWrite < getWbuf().capacity()) {
         synchronized(o) {
+          if (o.getState() != OperationState.WRITING) {
+              getLogger().debug("Bad state: %s", o.getState().toString());
+          }
           assert o.getState() == OperationState.WRITING;
 
           ByteBuffer obuf = o.getBuffer();
